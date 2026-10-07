@@ -1,0 +1,414 @@
+<title>Manual de Campo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Saira+Condensed:wght@500;600;700&display=swap">
+<style>
+/* Layout: mesa de mapa tactico. Cabecera tipo ficha, lista de unidades en rejilla, hoja inferior para ficha y comparador. */
+:root{
+  --bg:#E8ECEF;
+  --surface:#F6F8F9;
+  --ink:#121C26;
+  --muted:#566673;
+  --line:#C6CFD6;
+  --accent:#B8420F;
+  --accent-ink:#FFFFFF;
+  --bar:#2B3A47;
+  --bar-bg:#D5DCE1;
+  --land:#5A6A2B;
+  --air:#2D6A9F;
+  --sea:#1C7676;
+  --msl:#A5302B;
+  --warn-bg:#F3E3C9;
+  --warn-ink:#5B3A08;
+  --f-display:"Saira Condensed","Arial Narrow",sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,sans-serif;
+  --f-data:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E151B;
+    --surface:#16202A;
+    --ink:#E3E9ED;
+    --muted:#93A2AE;
+    --line:#2A3945;
+    --accent:#F0864A;
+    --accent-ink:#1A0E06;
+    --bar:#C9D5DE;
+    --bar-bg:#27343F;
+    --land:#8FA74A;
+    --air:#5EA6DD;
+    --sea:#4DB3B0;
+    --msl:#E2706A;
+    --warn-bg:#3A2D14;
+    --warn-ink:#F1D8A5;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E151B;
+  --surface:#16202A;
+  --ink:#E3E9ED;
+  --muted:#93A2AE;
+  --line:#2A3945;
+  --accent:#F0864A;
+  --accent-ink:#1A0E06;
+  --bar:#C9D5DE;
+  --bar-bg:#27343F;
+  --land:#8FA74A;
+  --air:#5EA6DD;
+  --sea:#4DB3B0;
+  --msl:#E2706A;
+  --warn-bg:#3A2D14;
+  --warn-ink:#F1D8A5;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:15px;
+  line-height:1.5;
+  padding-inline:16px;
+  padding-block:20px 96px;
+  background-image:
+    linear-gradient(var(--line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:48px 48px;
+  background-position:-1px -1px;
+}
+.wrap{max-width:880px;margin-inline:auto;display:flex;flex-direction:column;gap:18px}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header{display:flex;flex-direction:column;gap:6px;background:var(--bg);padding:14px 0 4px}
+.eyebrow{font-family:var(--f-data);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(38px,9vw,60px);line-height:.95;letter-spacing:.01em;text-transform:uppercase;margin:0;text-wrap:balance}
+.sub{margin:0;color:var(--muted);max-width:60ch}
+
+.notice{background:var(--warn-bg);color:var(--warn-ink);border:1px solid var(--line);padding:10px 12px;font-size:13px;border-radius:4px}
+
+.tools{display:flex;flex-direction:column;gap:10px}
+.search{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:11px 12px;font-size:16px}
+.search::placeholder{color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:6px 12px;font-family:var(--f-display);font-weight:600;font-size:16px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.count{font-family:var(--f-data);font-size:12px;color:var(--muted)}
+
+.list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:4px;display:flex;flex-direction:column;min-width:0}
+.open{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:6px;padding:12px 12px 8px;min-width:0}
+.open:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.row{display:flex;align-items:center;gap:8px;min-width:0}
+.name{font-family:var(--f-display);font-weight:700;font-size:23px;line-height:1.05;text-transform:uppercase;letter-spacing:.01em;overflow-wrap:anywhere}
+.mini{font-family:var(--f-data);font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 12px}
+.tag{font-family:var(--f-data);font-size:10.5px;font-weight:500;letter-spacing:.1em;color:#fff;padding:2px 6px;border-radius:2px;flex:none}
+.cat-land{background:var(--land)}
+.cat-air{background:var(--air)}
+.cat-sea{background:var(--sea)}
+.cat-msl{background:var(--msl)}
+:root[data-theme="dark"] .tag{color:#0E151B}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tag{color:#0E151B}}
+.state{font-family:var(--f-data);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-left:auto;flex:none}
+.state.ok{color:var(--accent)}
+.cmp{display:flex;align-items:center;gap:8px;padding:8px 12px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);cursor:pointer}
+.cmp input{width:18px;height:18px;accent-color:var(--accent);margin:0}
+.empty{padding:28px 16px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:4px}
+
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:var(--bg);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:12px;justify-content:center;z-index:5}
+.bar span{font-size:14px}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:4px;padding:9px 16px;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:inherit;border:1px solid currentColor}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.scrim{position:fixed;inset:0;background:rgba(8,12,16,.62);z-index:10;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--surface);color:var(--ink);width:100%;max-width:600px;max-height:92%;overflow:auto;border-radius:10px 10px 0 0;border:1px solid var(--line);padding:18px 16px calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px;animation:up .18s ease-out}
+@keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){.sheet{animation:none}}
+@media (min-width:640px){.scrim{align-items:center}.sheet{border-radius:10px}}
+.sheet h2{font-family:var(--f-display);font-weight:700;font-size:34px;line-height:1;text-transform:uppercase;margin:0;overflow-wrap:anywhere}
+.sheet-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.x{background:transparent;border:1px solid var(--line);border-radius:4px;width:36px;height:36px;cursor:pointer;flex:none;font-size:18px;line-height:1}
+.stats{display:flex;flex-direction:column;gap:10px}
+.stat{display:grid;grid-template-columns:92px 1fr 84px;gap:10px;align-items:center}
+.stat .lab{font-size:13px;color:var(--muted)}
+.stat .val{font-family:var(--f-data);font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
+.track{height:8px;background:var(--bar-bg);border-radius:1px;overflow:hidden}
+.fill{height:100%;background:var(--bar)}
+dl{margin:0;display:grid;grid-template-columns:110px 1fr;gap:8px 12px;font-size:14px}
+dt{color:var(--muted)}
+dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.note{margin:0;font-size:14px;color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+
+.form{display:flex;flex-direction:column;gap:12px}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field label{font-size:12px;color:var(--muted)}
+.field input,.field textarea{background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:8px 10px;font-size:16px;width:100%;min-width:0}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.vs h3{font-family:var(--f-display);font-size:22px;line-height:1.05;text-transform:uppercase;margin:0;overflow-wrap:anywhere}
+.cmp-row{display:flex;flex-direction:column;gap:6px;padding-top:10px;border-top:1px solid var(--line)}
+.cmp-row .lab{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-family:var(--f-data)}
+.cmp-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cmp-cols>div{display:flex;flex-direction:column;gap:4px;min-width:0}
+.cmp-cols .v{font-family:var(--f-data);font-size:14px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.cmp-cols .win .v{color:var(--accent);font-weight:500}
+.foot{font-size:12px;color:var(--muted);max-width:70ch}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Guía no oficial para jugadores de CON:WW3</div>
+    <h1>Manual de Campo</h1>
+    <p class="sub">Consulta rápida de tropas: estadísticas, costos y comparación entre unidades.</p>
+  </header>
+
+  <div class="notice" id="notice">Las cifras de esta versión son de ejemplo. Abre una unidad, pulsa Editar y escribe el valor real del juego; la ficha pasará a "Verificada".</div>
+
+  <section class="tools" aria-label="Buscar y filtrar">
+    <input id="q" class="search" type="search" placeholder="Buscar unidad" autocomplete="off">
+    <div class="chips" id="chips" role="group" aria-label="Categoría"></div>
+    <div class="count" id="count" aria-live="polite"></div>
+  </section>
+
+  <ul class="list" id="list"></ul>
+
+  <p class="foot">Proyecto de fans sin relación con Dorado Games. Los nombres de las unidades son términos militares genéricos y no se usa arte del juego.</p>
+</div>
+
+<div class="bar" id="bar" hidden>
+  <span id="barText"></span>
+  <button class="btn" id="barGo" type="button">Comparar</button>
+  <button class="btn ghost" id="barClear" type="button">Limpiar</button>
+</div>
+
+<div class="scrim" id="scrim" hidden>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"></div>
+</div>
+
+<script>
+(function(){
+  var CATS = {
+    land:{label:"Terrestre",code:"TIE"},
+    air:{label:"Aéreo",code:"AIR"},
+    sea:{label:"Naval",code:"MAR"},
+    msl:{label:"Misiles",code:"MIS"}
+  };
+  var STATS = [
+    {k:"atk",label:"Ataque",unit:"",scale:function(v){return v/100;}},
+    {k:"def",label:"Defensa",unit:"",scale:function(v){return v/100;}},
+    {k:"spd",label:"Velocidad",unit:" km/h",scale:function(v){return Math.sqrt(v/2500);}},
+    {k:"rng",label:"Alcance",unit:" km",scale:function(v){return Math.sqrt(v/5000);}}
+  ];
+  var BASE = [
+    {id:"inf",name:"Infantería",cat:"land",atk:18,def:30,spd:5,rng:1,cost:"Comida 30, Metales 10",time:"2 h",req:"Ninguno",note:"Unidad básica para ocupar y defender territorio."},
+    {id:"mec",name:"Infantería mecanizada",cat:"land",atk:34,def:42,spd:60,rng:2,cost:"Metales 80, Petróleo 25",time:"4 h",req:"Vehículos de combate",note:"Transporta tropas con blindaje ligero."},
+    {id:"esp",name:"Fuerzas especiales",cat:"land",atk:48,def:26,spd:7,rng:1,cost:"Comida 60, Metales 40",time:"6 h",req:"Entrenamiento avanzado",note:"Efectivas en ataques puntuales."},
+    {id:"mbt",name:"Tanque de batalla",cat:"land",atk:72,def:68,spd:55,rng:3,cost:"Metales 180, Petróleo 60",time:"9 h",req:"Blindados",note:"Núcleo de cualquier ofensiva terrestre."},
+    {id:"art",name:"Artillería autopropulsada",cat:"land",atk:80,def:20,spd:45,rng:40,cost:"Metales 150, Petróleo 40",time:"8 h",req:"Artillería",note:"Fuego indirecto desde la retaguardia."},
+    {id:"aaa",name:"Antiaérea móvil",cat:"land",atk:40,def:30,spd:50,rng:12,cost:"Metales 110, Petróleo 30",time:"6 h",req:"Defensa aérea",note:"Protege columnas contra aviones y helicópteros."},
+    {id:"fgt",name:"Caza",cat:"air",atk:65,def:35,spd:2000,rng:1500,cost:"Metales 220, Petróleo 120",time:"10 h",req:"Aviación",note:"Superioridad aérea."},
+    {id:"hel",name:"Helicóptero de ataque",cat:"air",atk:70,def:28,spd:270,rng:450,cost:"Metales 200, Petróleo 90",time:"9 h",req:"Aviación de ala rotatoria",note:"Apoyo cercano contra blindados."},
+    {id:"bmb",name:"Bombardero estratégico",cat:"air",atk:92,def:22,spd:900,rng:6000,cost:"Metales 420, Petróleo 260",time:"16 h",req:"Aviación estratégica",note:"Alcance largo para golpes profundos."},
+    {id:"des",name:"Destructor",cat:"sea",atk:60,def:55,spd:60,rng:150,cost:"Metales 300, Petróleo 140",time:"14 h",req:"Construcción naval",note:"Escolta versátil de flotas."},
+    {id:"sub",name:"Submarino",cat:"sea",atk:78,def:30,spd:45,rng:300,cost:"Metales 340, Petróleo 120",time:"15 h",req:"Guerra submarina",note:"Difícil de detectar."},
+    {id:"car",name:"Portaaviones",cat:"sea",atk:30,def:70,spd:55,rng:200,cost:"Metales 900, Petróleo 450",time:"30 h",req:"Aviación naval",note:"Plataforma móvil para aviones."},
+    {id:"crc",name:"Misil de crucero",cat:"msl",atk:88,def:5,spd:850,rng:1500,cost:"Metales 160, Petróleo 80",time:"8 h",req:"Misilística",note:"Ataque de precisión a larga distancia."}
+  ];
+  var KEY = "manual-de-campo-v1";
+  var edits = {};
+  try { edits = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e) { edits = {}; }
+  function persist(){ try { localStorage.setItem(KEY, JSON.stringify(edits)); } catch(e) {} }
+
+  var units = BASE.map(function(u){ return merged(u); });
+  function merged(u){
+    var o = {}, k, e = edits[u.id] || {};
+    for (k in u) o[k] = u[k];
+    for (k in e) o[k] = e[k];
+    o.verified = !!e.verified;
+    return o;
+  }
+  function refresh(){ units = BASE.map(merged); }
+  function byId(id){ for (var i=0;i<units.length;i++) if (units[i].id===id) return units[i]; return null; }
+
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+  function fmt(n){ return Number(n).toLocaleString("es-CO"); }
+
+  var state = {q:"",cat:"all",picked:[]};
+  var $ = function(id){ return document.getElementById(id); };
+  var chipsEl=$("chips"), listEl=$("list"), countEl=$("count"), barEl=$("bar"), sheetEl=$("sheet"), scrim=$("scrim");
+  var lastFocus = null;
+
+  function renderChips(){
+    var items = [["all","Todas"]].concat(Object.keys(CATS).map(function(k){ return [k,CATS[k].label]; }));
+    chipsEl.innerHTML = items.map(function(it){
+      return '<button type="button" class="chip" data-cat="'+it[0]+'" aria-pressed="'+(state.cat===it[0])+'">'+it[1]+'</button>';
+    }).join("");
+  }
+
+  function renderList(){
+    var q = state.q.trim().toLowerCase();
+    var shown = units.filter(function(u){
+      return (state.cat==="all" || u.cat===state.cat) && (!q || (u.name+" "+CATS[u.cat].label+" "+u.note).toLowerCase().indexOf(q)>-1);
+    });
+    countEl.textContent = shown.length + " de " + units.length + " unidades";
+    if (!shown.length){
+      listEl.innerHTML = '<li class="empty">Ninguna unidad coincide con la búsqueda.</li>';
+      return;
+    }
+    listEl.innerHTML = shown.map(function(u){
+      var c = CATS[u.cat];
+      var picked = state.picked.indexOf(u.id)>-1;
+      return '<li class="card">'+
+        '<button type="button" class="open" data-open="'+u.id+'">'+
+          '<span class="row"><span class="tag cat-'+u.cat+'">'+c.code+'</span>'+
+          '<span class="state'+(u.verified?' ok':'')+'">'+(u.verified?'Verificada':'Ejemplo')+'</span></span>'+
+          '<span class="name">'+esc(u.name)+'</span>'+
+          '<span class="mini"><span>ATQ '+fmt(u.atk)+'</span><span>DEF '+fmt(u.def)+'</span><span>'+fmt(u.spd)+' km/h</span></span>'+
+        '</button>'+
+        '<label class="cmp"><input type="checkbox" data-pick="'+u.id+'"'+(picked?' checked':'')+'> Comparar</label>'+
+      '</li>';
+    }).join("");
+  }
+
+  function renderBar(){
+    var n = state.picked.length;
+    barEl.hidden = n===0 || !scrim.hidden;
+    $("barText").textContent = n + " de 2 seleccionadas";
+    $("barGo").disabled = n<2;
+  }
+
+  function statBars(u){
+    return '<div class="stats">'+STATS.map(function(s){
+      var w = Math.max(2, Math.min(100, s.scale(u[s.k])*100));
+      return '<div class="stat"><span class="lab">'+s.label+'</span><div class="track"><div class="fill" style="width:'+w+'%"></div></div><span class="val">'+fmt(u[s.k])+s.unit+'</span></div>';
+    }).join("")+'</div>';
+  }
+
+  function openSheet(html){
+    sheetEl.innerHTML = html;
+    scrim.hidden = false;
+    barEl.hidden = true;
+    sheetEl.scrollTop = 0;
+    var f = sheetEl.querySelector("[data-close]");
+    if (f) f.focus();
+  }
+  function closeSheet(){
+    scrim.hidden = true;
+    renderBar();
+    if (lastFocus && document.contains(lastFocus)) { try { lastFocus.focus(); } catch(e){} }
+  }
+
+  function showUnit(id){
+    var u = byId(id); if (!u) return;
+    var c = CATS[u.cat];
+    openSheet(
+      '<div class="sheet-top"><div style="display:flex;flex-direction:column;gap:8px;min-width:0">'+
+        '<div class="row"><span class="tag cat-'+u.cat+'">'+c.code+'</span><span class="eyebrow">'+c.label+' · '+(u.verified?'Verificada':'Datos de ejemplo')+'</span></div>'+
+        '<h2 id="sheetTitle">'+esc(u.name)+'</h2></div>'+
+        '<button type="button" class="x" data-close aria-label="Cerrar">×</button></div>'+
+      statBars(u)+
+      '<dl><dt>Costo</dt><dd>'+esc(u.cost)+'</dd><dt>Producción</dt><dd>'+esc(u.time)+'</dd><dt>Requisito</dt><dd>'+esc(u.req)+'</dd></dl>'+
+      (u.note?'<p class="note">'+esc(u.note)+'</p>':'')+
+      '<div class="actions"><button type="button" class="btn" data-edit="'+u.id+'">Editar datos</button>'+
+      '<button type="button" class="btn ghost" data-pickfrom="'+u.id+'">'+(state.picked.indexOf(u.id)>-1?'Quitar de comparar':'Añadir a comparar')+'</button></div>'
+    );
+  }
+
+  function field(id,label,val,type){
+    return '<div class="field"><label for="f-'+id+'">'+label+'</label><input id="f-'+id+'" name="'+id+'" type="'+(type||"text")+'" value="'+esc(val)+'"'+(type==="number"?' inputmode="decimal" min="0"':'')+'></div>';
+  }
+  function showEdit(id){
+    var u = byId(id); if (!u) return;
+    openSheet(
+      '<div class="sheet-top"><h2 id="sheetTitle">Editar '+esc(u.name)+'</h2><button type="button" class="x" data-close aria-label="Cerrar">×</button></div>'+
+      '<form class="form" id="editForm" data-id="'+u.id+'">'+
+        field("name","Nombre",u.name)+
+        '<div class="grid2">'+field("atk","Ataque",u.atk,"number")+field("def","Defensa",u.def,"number")+field("spd","Velocidad (km/h)",u.spd,"number")+field("rng","Alcance (km)",u.rng,"number")+'</div>'+
+        field("cost","Costo",u.cost)+
+        '<div class="grid2">'+field("time","Producción",u.time)+field("req","Requisito",u.req)+'</div>'+
+        field("note","Nota",u.note)+
+        '<div class="actions"><button type="submit" class="btn">Guardar como verificada</button>'+
+        '<button type="button" class="btn ghost" data-view="'+u.id+'">Cancelar</button>'+
+        '<button type="button" class="btn ghost" data-reset="'+u.id+'">Restablecer ejemplo</button></div>'+
+      '</form>'
+    );
+  }
+
+  function showCompare(){
+    if (state.picked.length<2) return;
+    var a = byId(state.picked[0]), b = byId(state.picked[1]);
+    var rows = STATS.map(function(s){
+      var av=a[s.k], bv=b[s.k];
+      return '<div class="cmp-row"><span class="lab">'+s.label+'</span><div class="cmp-cols">'+
+        cell(av,bv,s)+cell(bv,av,s)+'</div></div>';
+    }).join("");
+    function cell(v,other,s){
+      var w = Math.max(2, Math.min(100, s.scale(v)*100));
+      return '<div class="'+(v>other?'win':'')+'"><span class="v">'+fmt(v)+s.unit+'</span><div class="track"><div class="fill" style="width:'+w+'%"></div></div></div>';
+    }
+    function txt(label,k){
+      return '<div class="cmp-row"><span class="lab">'+label+'</span><div class="cmp-cols"><div><span class="v">'+esc(a[k])+'</span></div><div><span class="v">'+esc(b[k])+'</span></div></div></div>';
+    }
+    openSheet(
+      '<div class="sheet-top"><span class="eyebrow">Comparación</span><button type="button" class="x" data-close aria-label="Cerrar">×</button></div>'+
+      '<div class="vs" id="sheetTitle">'+
+        '<div><span class="tag cat-'+a.cat+'">'+CATS[a.cat].code+'</span><h3>'+esc(a.name)+'</h3></div>'+
+        '<div><span class="tag cat-'+b.cat+'">'+CATS[b.cat].code+'</span><h3>'+esc(b.name)+'</h3></div>'+
+      '</div>'+rows+txt("Costo","cost")+txt("Producción","time")+txt("Requisito","req")+
+      '<div class="actions"><button type="button" class="btn ghost" data-close>Volver</button></div>'
+    );
+  }
+
+  function togglePick(id){
+    var i = state.picked.indexOf(id);
+    if (i>-1) state.picked.splice(i,1);
+    else { if (state.picked.length>=2) state.picked.shift(); state.picked.push(id); }
+    renderList(); renderBar();
+  }
+
+  $("q").addEventListener("input", function(e){ state.q = e.target.value; renderList(); });
+  chipsEl.addEventListener("click", function(e){
+    var b = e.target.closest("[data-cat]"); if (!b) return;
+    state.cat = b.getAttribute("data-cat"); renderChips(); renderList();
+  });
+  listEl.addEventListener("click", function(e){
+    var o = e.target.closest("[data-open]");
+    if (o){ lastFocus = o; showUnit(o.getAttribute("data-open")); }
+  });
+  listEl.addEventListener("change", function(e){
+    var p = e.target.closest("[data-pick]"); if (p) togglePick(p.getAttribute("data-pick"));
+  });
+  $("barGo").addEventListener("click", function(e){ lastFocus = e.currentTarget; showCompare(); });
+  $("barClear").addEventListener("click", function(){ state.picked = []; renderList(); renderBar(); });
+
+  scrim.addEventListener("click", function(e){
+    if (e.target===scrim) { closeSheet(); return; }
+    var t = e.target;
+    if (t.closest("[data-close]")) { closeSheet(); return; }
+    var ed = t.closest("[data-edit]"); if (ed) { showEdit(ed.getAttribute("data-edit")); return; }
+    var vw = t.closest("[data-view]"); if (vw) { showUnit(vw.getAttribute("data-view")); return; }
+    var pf = t.closest("[data-pickfrom]"); if (pf) { togglePick(pf.getAttribute("data-pickfrom")); showUnit(pf.getAttribute("data-pickfrom")); return; }
+    var rs = t.closest("[data-reset]");
+    if (rs) { var id = rs.getAttribute("data-reset"); delete edits[id]; persist(); refresh(); renderList(); showUnit(id); return; }
+  });
+  scrim.addEventListener("submit", function(e){
+    e.preventDefault();
+    var f = e.target, id = f.getAttribute("data-id");
+    var d = {verified:true};
+    ["name","cost","time","req","note"].forEach(function(k){ d[k] = f.elements[k].value.trim(); });
+    ["atk","def","spd","rng"].forEach(function(k){
+      var n = parseFloat(String(f.elements[k].value).replace(",","."));
+      d[k] = isFinite(n) && n>=0 ? n : byId(id)[k];
+    });
+    if (!d.name) d.name = byId(id).name;
+    edits[id] = d; persist(); refresh(); renderList(); showUnit(id);
+  });
+  document.addEventListener("keydown", function(e){ if (e.key==="Escape" && !scrim.hidden) closeSheet(); });
+
+  renderChips(); renderList(); renderBar();
+})();
+</script>

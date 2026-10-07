@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manual de Campo</title>
+<meta name="description" content="Guía no oficial de consulta rápida de tropas: estadísticas, costos y comparación. Sin relación con Dorado Games.">
+<meta name="theme-color" content="#2B3A47">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Saira+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Guía no oficial para jugadores de CON:WW3</div>
+    <h1>Manual de Campo</h1>
+    <p class="sub">Consulta rápida de tropas: estadísticas, costos y comparación entre unidades.</p>
+  </header>
+
+  <div class="notice" id="notice">Las cifras de esta versión son de ejemplo. Abre una unidad, pulsa Editar y escribe el valor real del juego; la ficha pasará a "Verificada".</div>
+
+  <section class="tools" aria-label="Buscar y filtrar">
+    <input id="q" class="search" type="search" placeholder="Buscar unidad" autocomplete="off">
+    <div class="chips" id="chips" role="group" aria-label="Categoría"></div>
+    <div class="count" id="count" aria-live="polite"></div>
+  </section>
+
+  <ul class="list" id="list"></ul>
+
+  <p class="foot">Guía no oficial, sin relación con Dorado Games. Los nombres de las unidades son términos militares genéricos y no se usa arte del juego.</p>
+</div>
+
+<div class="bar" id="bar" hidden>
+  <span id="barText"></span>
+  <button class="btn" id="barGo" type="button">Comparar</button>
+  <button class="btn ghost" id="barClear" type="button">Limpiar</button>
+</div>
+
+<div class="scrim" id="scrim" hidden>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

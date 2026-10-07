@@ -1,0 +1,15 @@
+[
+  {"id":"inf","name":"Infantería","cat":"land","atk":18,"def":30,"spd":5,"rng":1,"cost":"Comida 30, Metales 10","time":"2 h","req":"Ninguno","note":"Unidad básica para ocupar y defender territorio.","verified":false},
+  {"id":"mec","name":"Infantería mecanizada","cat":"land","atk":34,"def":42,"spd":60,"rng":2,"cost":"Metales 80, Petróleo 25","time":"4 h","req":"Vehículos de combate","note":"Transporta tropas con blindaje ligero.","verified":false},
+  {"id":"esp","name":"Fuerzas especiales","cat":"land","atk":48,"def":26,"spd":7,"rng":1,"cost":"Comida 60, Metales 40","time":"6 h","req":"Entrenamiento avanzado","note":"Efectivas en ataques puntuales.","verified":false},
+  {"id":"mbt","name":"Tanque de batalla","cat":"land","atk":72,"def":68,"spd":55,"rng":3,"cost":"Metales 180, Petróleo 60","time":"9 h","req":"Blindados","note":"Núcleo de cualquier ofensiva terrestre.","verified":false},
+  {"id":"art","name":"Artillería autopropulsada","cat":"land","atk":80,"def":20,"spd":45,"rng":40,"cost":"Metales 150, Petróleo 40","time":"8 h","req":"Artillería","note":"Fuego indirecto desde la retaguardia.","verified":false},
+  {"id":"aaa","name":"Antiaérea móvil","cat":"land","atk":40,"def":30,"spd":50,"rng":12,"cost":"Metales 110, Petróleo 30","time":"6 h","req":"Defensa aérea","note":"Protege columnas contra aviones y helicópteros.","verified":false},
+  {"id":"fgt","name":"Caza","cat":"air","atk":65,"def":35,"spd":2000,"rng":1500,"cost":"Metales 220, Petróleo 120","time":"10 h","req":"Aviación","note":"Superioridad aérea.","verified":false},
+  {"id":"hel","name":"Helicóptero de ataque","cat":"air","atk":70,"def":28,"spd":270,"rng":450,"cost":"Metales 200, Petróleo 90","time":"9 h","req":"Aviación de ala rotatoria","note":"Apoyo cercano contra blindados.","verified":false},
+  {"id":"bmb","name":"Bombardero estratégico","cat":"air","atk":92,"def":22,"spd":900,"rng":6000,"cost":"Metales 420, Petróleo 260","time":"16 h","req":"Aviación estratégica","note":"Alcance largo para golpes profundos.","verified":false},
+  {"id":"des","name":"Destructor","cat":"sea","atk":60,"def":55,"spd":60,"rng":150,"cost":"Metales 300, Petróleo 140","time":"14 h","req":"Construcción naval","note":"Escolta versátil de flotas.","verified":false},
+  {"id":"sub","name":"Submarino","cat":"sea","atk":78,"def":30,"spd":45,"rng":300,"cost":"Metales 340, Petróleo 120","time":"15 h","req":"Guerra submarina","note":"Difícil de detectar.","verified":false},
+  {"id":"car","name":"Portaaviones","cat":"sea","atk":30,"def":70,"spd":55,"rng":200,"cost":"Metales 900, Petróleo 450","time":"30 h","req":"Aviación naval","note":"Plataforma móvil para aviones.","verified":false},
+  {"id":"crc","name":"Misil de crucero","cat":"msl","atk":88,"def":5,"spd":850,"rng":1500,"cost":"Metales 160, Petróleo 80","time":"8 h","req":"Misilística","note":"Ataque de precisión a larga distancia.","verified":false}
+]
